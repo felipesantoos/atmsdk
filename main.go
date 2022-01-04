@@ -8,6 +8,21 @@ import (
 	"net/http"
 )
 
+func SaveAllAccountsFromCSV() {
+	res, err := http.Post("http://localhost:8000/api/account/save/csv", "", nil)
+	if err != nil {
+		panic(err)
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	message := string(body)
+	fmt.Print(message)
+}
+
 func GetAllAccounts() {
 	res, err := http.Get("http://localhost:8000/api/account/get/all")
 	if err != nil {
@@ -20,7 +35,7 @@ func GetAllAccounts() {
 	}
 
 	accountList := string(body)
-	fmt.Println(accountList)
+	fmt.Print(accountList)
 }
 
 func GetAccountById(id int) {
@@ -35,13 +50,13 @@ func GetAccountById(id int) {
 	}
 
 	account := string(body)
-	fmt.Println(account)
+	fmt.Print(account)
 }
 
-func Withdrawal(id int, value float64) {
+func Cash(id int, value float64) {
 	client := http.Client{}
 
-	url := fmt.Sprint("http://localhost:8000/api/account/withdraw/", id)
+	url := fmt.Sprint("http://localhost:8000/api/account/cash/", id)
 
 	jsonData, err := json.Marshal(map[string]float64{"value": value})
 	if err != nil {
@@ -62,7 +77,13 @@ func Withdrawal(id int, value float64) {
 		panic(err)
 	}
 
-	fmt.Println(res.StatusCode)
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	message := string(body)
+	fmt.Print(message)
 }
 
 func Deposit(id int, value float64) {
@@ -89,5 +110,12 @@ func Deposit(id int, value float64) {
 		panic(err)
 	}
 
-	fmt.Println(res.StatusCode)
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	message := string(body)
+
+	fmt.Print(message)
 }
